@@ -1,0 +1,1 @@
+Replace photo-1.jpg through photo-6.jpg with your own photos. Keep these exact filenames. No personal photos are included.
