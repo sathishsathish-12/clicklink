@@ -1,0 +1,1 @@
+Add audio files you are legally allowed to use: bigil-theme.mp3 and magale.mp3. These files are not bundled. The browser may block autoplay; tap Play after opening the site.
