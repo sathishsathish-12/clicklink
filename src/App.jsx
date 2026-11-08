@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { MusicPlayer } from "./components/MusicPlayer";
+import MusicPlayer from "./components/MusicPlayer";
 import { Navbar } from "./components/Navbar";
 import { PageTransition } from "./components/PageTransition";
 import { Welcome } from "./pages/Welcome";
