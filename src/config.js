@@ -28,13 +28,14 @@ You deserve all the happiness in the world.
 
 Happy Diwali! ❤️`,
   finalLine: "May your future be as bright as these fireworks and your smile never fade.",
-songs: [
-  {
-    title: "Bigil celebration track",
-    src: `${import.meta.env.BASE_URL}music/Bigil.mp3`
-  },
-  {
-    title: "Magale",
-    src: `${import.meta.env.BASE_URL}music/magale.mp3`
-  }
-]}
+// songs: [
+//   {
+//     title: "Bigil celebration track",
+//     src: `${import.meta.env.BASE_URL}music/Bigil.mp3`
+//   },
+//   {
+//     title: "Magale",
+//     src: `${import.meta.env.BASE_URL}music/magale.mp3`
+//   }
+// ] 
+}
