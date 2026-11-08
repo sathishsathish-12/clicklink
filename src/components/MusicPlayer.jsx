@@ -1,6 +1,11 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { FaPlay, FaPause, FaMusic, FaStepForward } from "react-icons/fa";
+import {
+  FaPlay,
+  FaPause,
+  FaMusic,
+  FaStepForward,
+} from "react-icons/fa";
 
 const songs = [
   {
@@ -9,29 +14,28 @@ const songs = [
   },
   {
     title: "Magale",
-    src: `${import.meta.env.BASE_URL}music/Magale.mp3`,
+    src: `${import.meta.env.BASE_URL}music/magale.mp3`,
   },
 ];
 
 function MusicPlayer() {
   const audioRef = useRef(null);
-
   const [currentSong, setCurrentSong] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
   // Play music
   const playMusic = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
     try {
-      if (!audioRef.current) return;
-
-      await audioRef.current.play();
-
+      await audio.play();
       setIsPlaying(true);
       setAutoplayBlocked(false);
     } catch (error) {
-      console.log("Music playback blocked:", error);
-
+      console.log("Music playback error:", error);
       setIsPlaying(false);
       setAutoplayBlocked(true);
     }
@@ -39,13 +43,13 @@ function MusicPlayer() {
 
   // Pause music
   const pauseMusic = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
+    if (!audioRef.current) return;
+
+    audioRef.current.pause();
+    setIsPlaying(false);
   };
 
-  // Play or pause
+  // Play or pause music
   const toggleMusic = () => {
     if (isPlaying) {
       pauseMusic();
@@ -54,24 +58,43 @@ function MusicPlayer() {
     }
   };
 
-  // Play next song
+  // Next song
   const nextSong = () => {
     setCurrentSong((previousSong) => {
       return (previousSong + 1) % songs.length;
     });
   };
 
-  // Attempt autoplay when component opens
+  // Try autoplay when component loads
   useEffect(() => {
     playMusic();
   }, []);
 
-  // Start playback after changing songs
+  // Load and play the selected song
   useEffect(() => {
-    if (currentSong !== 0) {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    audio.load();
+
+    if (isPlaying) {
       playMusic();
     }
   }, [currentSong]);
+
+  // When song finishes, play next song
+  const handleSongEnded = () => {
+    setCurrentSong((previousSong) => {
+      return (previousSong + 1) % songs.length;
+    });
+  };
+
+  // Audio error
+  const handleAudioError = () => {
+    setIsPlaying(false);
+    console.error("Unable to load song:", songs[currentSong].src);
+  };
 
   return (
     <div className="music-player">
@@ -79,28 +102,22 @@ function MusicPlayer() {
       <audio
         ref={audioRef}
         src={songs[currentSong].src}
-        onEnded={nextSong}
+        onEnded={handleSongEnded}
         onPlay={() => {
           setIsPlaying(true);
           setAutoplayBlocked(false);
         }}
         onPause={() => setIsPlaying(false)}
-        onError={() => {
-          setIsPlaying(false);
-          console.error(
-            "Cannot load music file:",
-            songs[currentSong].src
-          );
-        }}
+        onError={handleAudioError}
         preload="auto"
       />
 
       <div className="music-info">
         <FaMusic className="music-icon" />
-
         <span>{songs[currentSong].title}</span>
       </div>
 
+      {/* Play / Pause */}
       <button
         type="button"
         onClick={toggleMusic}
@@ -110,6 +127,7 @@ function MusicPlayer() {
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
 
+      {/* Next song */}
       <button
         type="button"
         onClick={nextSong}
@@ -119,6 +137,7 @@ function MusicPlayer() {
         <FaStepForward />
       </button>
 
+      {/* Show button if autoplay is blocked */}
       {autoplayBlocked && !isPlaying && (
         <button
           type="button"
